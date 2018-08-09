@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Response {
+public class MovieResponse {
     @SerializedName("page")
     private int page;
     @SerializedName("total_results")
