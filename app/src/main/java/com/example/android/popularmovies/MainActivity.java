@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.popularmovies.Adapters.MovieAdapter;
+import com.example.android.popularmovies.Models.Category;
 import com.example.android.popularmovies.Models.Movie;
 import com.example.android.popularmovies.Models.MovieResponse;
 import com.example.android.popularmovies.Utils.ApiClient;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int MOVIES_LOADER_ID = 1;
     private static final int GRID_COLUMNS_NUMBER = 3;
     private MovieAdapter moviesAdapter;
+    private static Category category = Category.TOP_RATED;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +49,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private void initMoviesRecycler() {
         RecyclerView moviesRecycler = findViewById(R.id.movie_recycler);
         moviesRecycler.setHasFixedSize(true);
+
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, GRID_COLUMNS_NUMBER);
         moviesRecycler.setLayoutManager(layoutManager);
+
         moviesAdapter = new MovieAdapter(this, new ArrayList<Movie>());
         moviesRecycler.setAdapter(moviesAdapter);
     }
@@ -61,7 +65,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        int selectedCategoryId = item.getItemId();
+        switch (selectedCategoryId) {
+            case R.id.action_most_popular:
+                category = Category.MOST_POPULAR;
+                getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, this);
+                return true;
+            case R.id.action_top_rated:
+                category = Category.TOP_RATED;
+                getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @NonNull
@@ -72,8 +88,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<Movie>> loader, List<Movie> movies) {
-        if (movies != null && !movies.isEmpty())
+        if (movies != null && !movies.isEmpty()) {
+            moviesAdapter.clear();
             moviesAdapter.addAll(movies);
+        }
     }
 
     @Override
@@ -91,7 +109,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         public List<Movie> loadInBackground() {
             ApiInterface apiService = ApiClient.getClient()
                     .create(ApiInterface.class);
-            Call<MovieResponse> call = apiService.getTopRatedMovies(apiKey);
+            Call<MovieResponse> call;
+            if (category == Category.TOP_RATED)
+                call = apiService.getTopRatedMovies(apiKey);
+            else
+                call = apiService.getPopularMovies(apiKey);
             try {
                 Response<MovieResponse> response = call.execute();
                 return response.body().getResults();
