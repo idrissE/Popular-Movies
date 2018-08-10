@@ -1,6 +1,7 @@
 package com.example.android.popularmovies.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.android.popularmovies.DetailActivity;
 import com.example.android.popularmovies.Models.Movie;
 import com.example.android.popularmovies.R;
 import com.squareup.picasso.Picasso;
@@ -51,9 +53,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
         }
 
         void bind(int position) {
@@ -62,6 +65,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             Picasso.get()
                     .load(MOVIE_POSTER_BASE_URL + currentMovie.getPosterPath())
                     .into(moviePoster);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent detailIntent = new Intent(context, DetailActivity.class);
+            detailIntent.putExtra("CURRENT_MOVIE", movies.get(getAdapterPosition()));
+            context.startActivity(detailIntent);
         }
     }
 }

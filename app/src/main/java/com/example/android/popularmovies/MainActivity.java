@@ -30,9 +30,9 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Movie>> {
     private static final String apiKey = BuildConfig.ApiKey;
     private static final int MOVIES_LOADER_ID = 1;
-    private static final int GRID_COLUMNS_NUMBER = 3;
+    private static final int GRID_COLUMNS_NUMBER = 2;
     private MovieAdapter moviesAdapter;
-    private static Category category = Category.TOP_RATED;
+    private static Category category = Category.MOST_POPULAR;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
