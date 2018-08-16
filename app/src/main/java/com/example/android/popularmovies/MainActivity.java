@@ -10,10 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.popularmovies.Adapters.MovieAdapter;
+import com.example.android.popularmovies.Adapters.PaginationScrollListener;
 import com.example.android.popularmovies.Models.Category;
 import com.example.android.popularmovies.Models.Movie;
 import com.example.android.popularmovies.Models.MovieResponse;
@@ -34,6 +36,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private MovieAdapter moviesAdapter;
     private static Category category = Category.MOST_POPULAR;
 
+    private static int CURRENT_PAGE = 1;
+
+    private static int TOTAL_PAGES_COUNT;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,11 +56,40 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         RecyclerView moviesRecycler = findViewById(R.id.movie_recycler);
         moviesRecycler.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, GRID_COLUMNS_NUMBER);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, GRID_COLUMNS_NUMBER);
         moviesRecycler.setLayoutManager(layoutManager);
 
         moviesAdapter = new MovieAdapter(this, new ArrayList<Movie>());
         moviesRecycler.setAdapter(moviesAdapter);
+
+        moviesRecycler.addOnScrollListener(new PaginationScrollListener(layoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, MainActivity.this);
+                CURRENT_PAGE++;
+            }
+
+            @Override
+            public int getTotalPageCount() {
+                return TOTAL_PAGES_COUNT;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return false;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return false;
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CURRENT_PAGE = 1;
     }
 
     @Override
@@ -69,10 +104,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         switch (selectedCategoryId) {
             case R.id.action_most_popular:
                 category = Category.MOST_POPULAR;
+                CURRENT_PAGE = 1;
+                moviesAdapter.clear();
                 getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, this);
                 return true;
             case R.id.action_top_rated:
                 category = Category.TOP_RATED;
+                CURRENT_PAGE = 1;
+                moviesAdapter.clear();
                 getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, this);
                 return true;
             default:
@@ -89,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(@NonNull Loader<List<Movie>> loader, List<Movie> movies) {
         if (movies != null && !movies.isEmpty()) {
-            moviesAdapter.clear();
             moviesAdapter.addAll(movies);
         }
     }
@@ -111,11 +149,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     .create(ApiInterface.class);
             Call<MovieResponse> call;
             if (category == Category.TOP_RATED)
-                call = apiService.getTopRatedMovies(apiKey);
+                call = apiService.getTopRatedMovies(apiKey, CURRENT_PAGE);
             else
-                call = apiService.getPopularMovies(apiKey);
+                call = apiService.getPopularMovies(apiKey, CURRENT_PAGE);
             try {
                 Response<MovieResponse> response = call.execute();
+                TOTAL_PAGES_COUNT = response.body().getTotal_results();
                 return response.body().getResults();
             } catch (IOException e) {
                 e.printStackTrace();
