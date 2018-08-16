@@ -8,4 +8,71 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="FullContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="WrapperContainer">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--Detail styles-->
+    <style name="HeaderStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/header_height</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+
+    <style name="PosterStyle">
+        <item name="android:layout_width">@dimen/poster_width</item>
+        <item name="android:layout_height">@dimen/poster_height</item>
+        <item name="android:layout_marginLeft">@dimen/base_dim</item>
+        <item name="android:layout_marginTop">@dimen/half_dim</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+
+    <style name="TitleStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/base_dim</item>
+        <item name="android:layout_marginRight">@dimen/base_dim</item>
+        <item name="android:layout_marginTop">@dimen/half_dim</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+    </style>
+
+    <style name="RatingBarStyle" parent="@android:style/Widget.DeviceDefault.RatingBar.Small">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/base_dim</item>
+        <item name="android:layout_marginTop">@dimen/half_dim</item>
+        <item name="android:numStars">10</item>
+    </style>
+
+    <style name="LabelStyle" parent="WrapperContainer">
+        <item name="android:layout_marginLeft">@dimen/base_dim</item>
+        <item name="android:layout_marginTop">@dimen/double_dim</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
+    </style>
+
+    <style name="DateDataStyle" parent="WrapperContainer">
+        <item name="android:layout_marginLeft">@dimen/base_dim</item>
+    </style>
+
+    <style name="OverviewStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/base_dim</item>
+        <item name="android:layout_marginLeft">@dimen/base_dim</item>
+        <item name="android:layout_marginRight">@dimen/base_dim</item>
+        <item name="android:layout_marginTop">@dimen/base_dim</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ToolbarStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?android:attr/actionBarSize</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 </resources>
