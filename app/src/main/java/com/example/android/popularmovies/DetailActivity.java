@@ -34,10 +34,12 @@ public class DetailActivity extends AppCompatActivity {
 
         Picasso.get()
                 .load(MOVIE_POSTER_BASE_URL + "w500" + movie.getPosterPath())
+                .error(R.drawable.not_available)
                 .into(headerPosterImg);
 
         Picasso.get()
                 .load(MOVIE_POSTER_BASE_URL + "w185" + movie.getPosterPath())
+                .error(R.drawable.not_available)
                 .into(mainPosterImg);
 
         TextView movieTitleTv = findViewById(R.id.movie_title);

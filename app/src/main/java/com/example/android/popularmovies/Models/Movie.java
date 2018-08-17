@@ -6,8 +6,6 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 public class Movie implements Parcelable {
-    @SerializedName("id")
-    private Integer id;
     @SerializedName("vote_average")
     private Double voteAverage;
     @SerializedName("title")
@@ -38,7 +36,6 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
         dest.writeDouble(voteAverage);
         dest.writeString(title);
         dest.writeString(posterPath);
@@ -47,7 +44,6 @@ public class Movie implements Parcelable {
     }
 
     private Movie(Parcel in) {
-        id = in.readInt();
         voteAverage = in.readDouble();
         title = in.readString();
         posterPath = in.readString();
@@ -55,61 +51,24 @@ public class Movie implements Parcelable {
         releaseDate = in.readString();
     }
 
-    public Movie(Integer id, Double voteAverage, String title, String posterPath, String overview, String releaseDate) {
-        this.id = id;
-        this.voteAverage = voteAverage;
-        this.title = title;
-        this.posterPath = posterPath;
-        this.overview = overview;
-        this.releaseDate = releaseDate;
-    }
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Double getVoteAverage() {
         return voteAverage;
-    }
-
-    public void setVoteAverage(Double voteAverage) {
-        this.voteAverage = voteAverage;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getPosterPath() {
         return posterPath;
-    }
-
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
     }
 
     public String getOverview() {
         return overview;
     }
 
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
     public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
 }
