@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +20,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.popularmovies.Adapters.MovieAdapter;
-import com.example.android.popularmovies.Adapters.PaginationScrollListener;
 import com.example.android.popularmovies.Models.Category;
 import com.example.android.popularmovies.Models.Movie;
 import com.example.android.popularmovies.Models.MovieResponse;
@@ -90,32 +90,27 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         RecyclerView moviesRecycler = findViewById(R.id.movie_recycler);
         moviesRecycler.setHasFixedSize(true);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this, GRID_COLUMNS_NUMBER);
+        final GridLayoutManager layoutManager = new GridLayoutManager(this, GRID_COLUMNS_NUMBER);
         moviesRecycler.setLayoutManager(layoutManager);
 
         moviesAdapter = new MovieAdapter(this, new ArrayList<Movie>());
         moviesRecycler.setAdapter(moviesAdapter);
 
-        moviesRecycler.addOnScrollListener(new PaginationScrollListener(layoutManager) {
+        moviesRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            protected void loadMoreItems() {
-                getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, MainActivity.this);
-                CURRENT_PAGE++;
-            }
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                // check scroll down
+                if (dy > 0) {
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
 
-            @Override
-            public int getTotalPageCount() {
-                return TOTAL_PAGES_COUNT;
-            }
-
-            @Override
-            public boolean isLastPage() {
-                return false;
-            }
-
-            @Override
-            public boolean isLoading() {
-                return false;
+                    if ((visibleItemCount + pastVisibleItems) >= totalItemCount && TOTAL_PAGES_COUNT > CURRENT_PAGE + 1) {
+                        getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, MainActivity.this);
+                        CURRENT_PAGE++;
+                    }
+                }
             }
         });
     }
@@ -162,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(@NonNull Loader<List<Movie>> loader, List<Movie> movies) {
         progressBar.setVisibility(View.GONE);
-
+        Log.v("total", String.valueOf(CURRENT_PAGE));
         if (movies != null && !movies.isEmpty()) {
             moviesAdapter.addAll(movies);
         } else
@@ -191,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 call = apiService.getPopularMovies(apiKey, CURRENT_PAGE);
             try {
                 Response<MovieResponse> response = call.execute();
-                TOTAL_PAGES_COUNT = response.body() != null ? response.body().getTotal_results() : 0;
+                TOTAL_PAGES_COUNT = response.body() != null ? response.body().getTotal_pages() : 0;
                 return response.body() != null ? response.body().getResults() : null;
             } catch (IOException e) {
                 e.printStackTrace();
