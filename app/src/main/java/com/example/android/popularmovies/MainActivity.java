@@ -62,6 +62,27 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.category_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int selectedCategoryId = item.getItemId();
+        switch (selectedCategoryId) {
+            case R.id.action_most_popular:
+                changeToCategory(Category.MOST_POPULAR);
+                return true;
+            case R.id.action_top_rated:
+                changeToCategory(Category.TOP_RATED);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     /**
      * Configure the movies'RecyclerView
      */
@@ -103,47 +124,33 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * Check if the phone is connected to internet
      */
     private boolean isConnected() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        ConnectivityManager connectivity = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (null != connectivity) {
+            NetworkInfo info = connectivity.getActiveNetworkInfo();
+            if (null != info && info.isConnected()) {
+                return info.getState() == NetworkInfo.State.CONNECTED;
+            }
+        }
+        return false;
     }
 
     /**
      * Switch to another movies'category
      */
     private void changeToCategory(Category newCategory) {
-        category = newCategory;
-        CURRENT_PAGE = 1;
-        moviesAdapter.clear();
-        getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        CURRENT_PAGE = 1;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.category_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int selectedCategoryId = item.getItemId();
-        switch (selectedCategoryId) {
-            case R.id.action_most_popular:
-                changeToCategory(Category.MOST_POPULAR);
-                return true;
-            case R.id.action_top_rated:
-                changeToCategory(Category.TOP_RATED);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (isConnected()) {
+            category = newCategory;
+            CURRENT_PAGE = 1;
+            moviesAdapter.clear();
+            getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, this);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        CURRENT_PAGE = 1;
     }
 
     @NonNull

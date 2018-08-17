@@ -31,7 +31,7 @@
             <TextView
                 android:id="@+id/movie_title"
                 style="@style/TitleStyle"
-                android:fontFamily="sans-serif"
+                app:fontFamily="sans-serif"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.04"
                 app:layout_constraintStart_toEndOf="@+id/main_poster"
