@@ -1,6 +1,8 @@
 package com.example.android.popularmovies;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -10,9 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.android.popularmovies.Adapters.MovieAdapter;
 import com.example.android.popularmovies.Adapters.PaginationScrollListener;
@@ -35,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int GRID_COLUMNS_NUMBER = 2;
     private MovieAdapter moviesAdapter;
     private static Category category = Category.MOST_POPULAR;
+    private TextView errorMsgTv;
+    private ProgressBar progressBar;
 
     private static int CURRENT_PAGE = 1;
 
@@ -44,9 +50,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        errorMsgTv = findViewById(R.id.error_message);
+        progressBar = findViewById(R.id.progress_bar);
 
-        initMoviesRecycler();
-        getSupportLoaderManager().initLoader(MOVIES_LOADER_ID, null, this);
+        if (isConnected()) {
+            initMoviesRecycler();
+            getSupportLoaderManager().initLoader(MOVIES_LOADER_ID, null, this);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            errorMsgTv.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -86,6 +99,26 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
     }
 
+    /**
+     * Check if the phone is connected to internet
+     */
+    private boolean isConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    /**
+     * Switch to another movies'category
+     */
+    private void changeToCategory(Category newCategory) {
+        category = newCategory;
+        CURRENT_PAGE = 1;
+        moviesAdapter.clear();
+        getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, this);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -103,16 +136,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         int selectedCategoryId = item.getItemId();
         switch (selectedCategoryId) {
             case R.id.action_most_popular:
-                category = Category.MOST_POPULAR;
-                CURRENT_PAGE = 1;
-                moviesAdapter.clear();
-                getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, this);
+                changeToCategory(Category.MOST_POPULAR);
                 return true;
             case R.id.action_top_rated:
-                category = Category.TOP_RATED;
-                CURRENT_PAGE = 1;
-                moviesAdapter.clear();
-                getSupportLoaderManager().restartLoader(MOVIES_LOADER_ID, null, this);
+                changeToCategory(Category.TOP_RATED);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -127,9 +154,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<Movie>> loader, List<Movie> movies) {
+        progressBar.setVisibility(View.GONE);
+
         if (movies != null && !movies.isEmpty()) {
             moviesAdapter.addAll(movies);
-        }
+        } else
+            errorMsgTv.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -154,8 +184,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 call = apiService.getPopularMovies(apiKey, CURRENT_PAGE);
             try {
                 Response<MovieResponse> response = call.execute();
-                TOTAL_PAGES_COUNT = response.body().getTotal_results();
-                return response.body().getResults();
+                TOTAL_PAGES_COUNT = response.body() != null ? response.body().getTotal_results() : 0;
+                return response.body() != null ? response.body().getResults() : null;
             } catch (IOException e) {
                 e.printStackTrace();
             }
