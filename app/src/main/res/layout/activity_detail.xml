@@ -31,9 +31,12 @@
             <TextView
                 android:id="@+id/movie_title"
                 style="@style/TitleStyle"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 app:fontFamily="sans-serif"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.04"
+                app:layout_constraintEnd_toStartOf="@+id/favorite_btn"
                 app:layout_constraintStart_toEndOf="@+id/main_poster"
                 app:layout_constraintTop_toBottomOf="@+id/header_poster"
                 tools:text="Movie Title" />
@@ -41,6 +44,9 @@
             <RatingBar
                 android:id="@+id/vote_average"
                 style="@style/RatingBarStyle"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/favorite_btn"
                 app:layout_constraintStart_toEndOf="@+id/main_poster"
                 app:layout_constraintTop_toBottomOf="@+id/movie_title" />
 
@@ -67,6 +73,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/release_date_label"
                 tools:text="Overview" />
+
+            <ImageButton
+                android:id="@+id/favorite_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@android:color/transparent"
+                android:tint="@android:color/holo_red_dark"
+                app:layout_constraintBottom_toBottomOf="@+id/header_poster"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/header_poster"
+                app:srcCompat="@drawable/ic_star" />
         </android.support.constraint.ConstraintLayout>
 
         <android.support.v7.widget.Toolbar

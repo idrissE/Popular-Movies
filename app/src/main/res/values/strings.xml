@@ -4,4 +4,5 @@
     <string name="most_popular">Most Popular</string>
     <string name="release_date_label">Release Date:</string>
     <string name="no_internet_error">Sorry an error occurred. Please check your internet connection</string>
+    <string name="favorite">Favorite</string>
 </resources>
