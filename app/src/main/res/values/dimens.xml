@@ -7,4 +7,5 @@
     <dimen name="base_dim">16dp</dimen>
     <dimen name="half_dim">8dp</dimen>
     <dimen name="double_dim">32dp</dimen>
+    <dimen name="divider_size">1dp</dimen>
 </resources>
