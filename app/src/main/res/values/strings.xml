@@ -6,4 +6,8 @@
     <string name="no_internet_error">Sorry an error occurred. Please check your internet connection</string>
     <string name="favorite">Favorite</string>
     <string name="reviews">Reviews</string>
+    <string name="trailers">Trailers</string>
+    <string name="save_success">Movie added to favorite</string>
+    <string name="remove_success">Movie removed from favorites</string>
+    <string name="server_error">Sorry server returned an error. Please try again</string>
 </resources>

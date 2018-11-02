@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/half_dim"
+    android:paddingBottom="@dimen/half_dim">
+
+    <ImageView
+        android:id="@+id/trailer_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_action_movie" />
+
+    <TextView
+        android:id="@+id/trailer_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/half_dim"
+        android:layout_toEndOf="@id/trailer_icon"
+        android:layout_toRightOf="@id/trailer_icon"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        tools:text="Author Name" />
+
+</RelativeLayout>

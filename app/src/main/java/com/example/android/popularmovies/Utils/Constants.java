@@ -5,7 +5,7 @@ import com.example.android.popularmovies.BuildConfig;
 public class Constants {
     public static final String apiKey = BuildConfig.ApiKey;
 
-    public static final String MOVIE_POSTER_BASE_URL = "https://image.tmdb.org/t/p/";
+    private static final String MOVIE_POSTER_BASE_URL = "https://image.tmdb.org/t/p/";
 
     public static final String MOVIE_THUMBNAIL_BASE_URL = MOVIE_POSTER_BASE_URL + "w185";
 

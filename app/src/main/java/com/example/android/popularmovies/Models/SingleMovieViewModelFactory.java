@@ -2,6 +2,7 @@ package com.example.android.popularmovies.Models;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
+import android.support.annotation.NonNull;
 
 import com.example.android.popularmovies.database.AppDatabase;
 
@@ -14,8 +15,9 @@ public class SingleMovieViewModelFactory extends ViewModelProvider.NewInstanceFa
         this.movieId = movieId;
     }
 
+    @NonNull
     @Override
-    public <T extends ViewModel> T create(Class<T> modelClass) {
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         //noinspection unchecked
         return (T) new SingleMovieViewModel(mDb, movieId);
     }

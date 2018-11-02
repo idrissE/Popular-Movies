@@ -36,17 +36,19 @@
     <style name="TitleStyle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">@dimen/base_dim</item>
-        <item name="android:layout_marginRight">@dimen/base_dim</item>
+        <item name="android:layout_marginLeft">@dimen/half_dim</item>
+        <item name="android:layout_marginRight">@dimen/half_dim</item>
         <item name="android:layout_marginTop">@dimen/half_dim</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+        <item name="android:textColor">@color/headerTextColor</item>
     </style>
 
     <style name="RatingBarStyle" parent="@android:style/Widget.DeviceDefault.RatingBar.Small">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">@dimen/base_dim</item>
+        <item name="android:layout_marginLeft">@dimen/half_dim</item>
         <item name="android:layout_marginTop">@dimen/half_dim</item>
+        <item name="android:layout_marginRight">@dimen/half_dim</item>
         <item name="android:numStars">10</item>
     </style>
 
@@ -54,6 +56,7 @@
         <item name="android:layout_marginLeft">@dimen/base_dim</item>
         <item name="android:layout_marginTop">@dimen/double_dim</item>
         <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:textColor">@color/headerTextColor</item>
     </style>
 
     <style name="DateDataStyle" parent="WrapperContainer">
@@ -74,5 +77,14 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?android:attr/actionBarSize</item>
         <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="DetailRcStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/base_dim</item>
+        <item name="android:layout_marginTop">@dimen/base_dim</item>
+        <item name="android:layout_marginRight">@dimen/base_dim</item>
+        <item name="android:layout_marginBottom">@dimen/base_dim</item>
     </style>
 </resources>

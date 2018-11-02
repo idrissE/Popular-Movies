@@ -10,9 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/base_dim"
+        android:layout_marginRight="@dimen/base_dim"
         android:layout_toStartOf="@id/vote_average"
         android:layout_toLeftOf="@id/vote_average"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textColor="@color/headerTextColor"
         tools:text="Movie name" />
 
     <TextView

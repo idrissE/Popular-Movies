@@ -23,7 +23,6 @@ import java.util.List;
 
 public class FavoriteActivity extends AppCompatActivity {
     private static final int GRID_COLUMNS_NUMBER = 2;
-    private MovieAdapter moviesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +77,7 @@ public class FavoriteActivity extends AppCompatActivity {
         }
 
         moviesRecycler.setLayoutManager(layoutManager);
-        moviesAdapter = new MovieAdapter(this, movies, mode);
+        MovieAdapter moviesAdapter = new MovieAdapter(this, movies, mode);
         moviesRecycler.setAdapter(moviesAdapter);
     }
 }
